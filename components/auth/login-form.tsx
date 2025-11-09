@@ -65,6 +65,7 @@ export function LoginForm() {
 
   const demoCredentials = [
     { role: "Super Admin", email: "admin@adminOS.com", password: "admin123" },
+    { role: "Super Admin (Kaacquah)", email: "kaacquah@company.com", password: "admin123" },
     { role: "Executive (CEO)", email: "ceo@company.com", password: "exec123" },
     { role: "Finance Director", email: "finance-director@company.com", password: "fin123" },
     { role: "Department Manager", email: "manager@company.com", password: "mgr123" },
@@ -113,13 +114,13 @@ export function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 shadow-xl">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center font-bold text-2xl text-primary-foreground mx-auto mb-4">
+      <Card className="w-full max-w-md p-6 sm:p-8 shadow-xl">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center font-bold text-xl sm:text-2xl text-primary-foreground mx-auto mb-4">
             A
           </div>
-          <h1 className="text-3xl font-bold text-foreground">AdminOS</h1>
-          <p className="text-muted-foreground mt-2">Enterprise Management Platform</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">AdminOS</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">Enterprise Management Platform</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

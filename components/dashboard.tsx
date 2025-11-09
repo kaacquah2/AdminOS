@@ -815,10 +815,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 sm:p-6 md:p-8 space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">{getDashboardTitle()}</h1>
-        <p className="text-muted-foreground">Welcome back, {user?.fullName}! Here's your workflow overview.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">{getDashboardTitle()}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Welcome back, {user?.fullName}! Here's your workflow overview.</p>
       </div>
 
       {/* Role-specific Stats */}
@@ -939,9 +939,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       {/* Quick Actions */}
-      <Card className="p-6">
-        <h3 className="font-semibold mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <Card className="p-4 sm:p-6">
+        <h3 className="font-semibold mb-4 text-base sm:text-lg">Quick Actions</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           {user?.role === "super_admin" && (
             <>
               <Button variant="outline" onClick={() => onNavigate?.("employees")} className="gap-2">

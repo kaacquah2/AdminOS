@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   LayoutDashboard,
@@ -25,10 +26,13 @@ import {
   Megaphone,
   Building2,
   Briefcase,
+  Menu,
 } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { isModuleAccessible } from "@/lib/role-routing"
 import { useToast } from "@/hooks/use-toast"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
 
 interface NavigationProps {
   activeModule: string
@@ -38,6 +42,8 @@ interface NavigationProps {
 export function ProtectedNavigation({ activeModule, onModuleChange }: NavigationProps) {
   const { user, logout } = useAuth()
   const { toast } = useToast()
+  const isMobile = useIsMobile()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   if (!user) return null
 
@@ -264,6 +270,10 @@ export function ProtectedNavigation({ activeModule, onModuleChange }: Navigation
 
   // Use database accessible_modules if available, otherwise fall back to hardcoded role checks
   const accessibleModules = allModules.filter((module) => {
+    // Super admin always has access to all modules
+    if (user.role === "super_admin") {
+      return true
+    }
     // First check if user has accessible_modules from database
     if (user.accessibleModules && user.accessibleModules.length > 0) {
       return user.accessibleModules.includes(module.id)
@@ -290,9 +300,14 @@ export function ProtectedNavigation({ activeModule, onModuleChange }: Navigation
     }
   }
 
-  return (
-    <div className="w-64 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border h-screen">
-      <div className="p-6 border-b border-sidebar-border">
+  const handleModuleChange = (moduleId: string) => {
+    onModuleChange(moduleId)
+    if (isMobile) setMobileMenuOpen(false)
+  }
+
+  const NavigationContent = () => (
+    <>
+      <div className="p-4 sm:p-6 border-b border-sidebar-border">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center font-bold">A</div>
@@ -351,7 +366,7 @@ export function ProtectedNavigation({ activeModule, onModuleChange }: Navigation
           return (
             <button
               key={module.id}
-              onClick={() => onModuleChange(module.id)}
+              onClick={() => handleModuleChange(module.id)}
               className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
                 isActive
                   ? "bg-sidebar-primary text-sidebar-primary-foreground"
@@ -370,7 +385,7 @@ export function ProtectedNavigation({ activeModule, onModuleChange }: Navigation
           variant="outline"
           size="sm"
           className="w-full justify-start bg-transparent"
-          onClick={() => onModuleChange("settings")}
+          onClick={() => handleModuleChange("settings")}
         >
           <Settings className="w-4 h-4 mr-2" />
           Settings
@@ -385,6 +400,35 @@ export function ProtectedNavigation({ activeModule, onModuleChange }: Navigation
           Logout
         </Button>
       </div>
+    </>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 left-4 z-40 md:hidden bg-background/80 backdrop-blur-sm border border-border shadow-md"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu className="w-5 h-5" />
+        </Button>
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetContent side="left" className="w-80 p-0 bg-sidebar text-sidebar-foreground">
+            <div className="flex flex-col h-full">
+              <NavigationContent />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </>
+    )
+  }
+
+  return (
+    <div className="hidden md:flex w-64 bg-sidebar text-sidebar-foreground flex-col border-r border-sidebar-border h-screen">
+      <NavigationContent />
     </div>
   )
 }

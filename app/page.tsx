@@ -86,9 +86,9 @@ function HomeContent() {
   }
 
   return (
-    <div className={`flex h-screen bg-background ${darkMode ? "dark" : ""}`}>
+    <div className={`flex flex-col md:flex-row h-screen bg-background ${darkMode ? "dark" : ""}`}>
       <ProtectedNavigation activeModule={activeModule} onModuleChange={setActiveModule} />
-      <main className="flex-1 overflow-auto">{modules[activeModule] || <Dashboard />}</main>
+      <main className="flex-1 overflow-auto pt-16 md:pt-0">{modules[activeModule] || <Dashboard />}</main>
     </div>
   )
 }
